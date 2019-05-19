@@ -3,12 +3,12 @@
   #include <avr/power.h>
 #endif
 
-#define PIN 2
-#define MAX 10
-#define RATE 30
-#define CONTROLLERS 15
+#define PIN 6
+#define MAX 100
+#define RATE 20
+#define CONTROLLERS 7
 
-Adafruit_NeoPixel stars = Adafruit_NeoPixel(15, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel stars = Adafruit_NeoPixel(CONTROLLERS, PIN, NEO_GRB + NEO_KHZ800);
 int starlight[CONTROLLERS][3];
 
 void setup() {
@@ -23,10 +23,14 @@ void setup() {
   stars.begin();
   stars.show(); // Initialize all pixels to 'off'
   fadeIn();
+  analogWrite(A2, 150);
+  analogWrite(A3, 150);
+  analogWrite(A5, 150);
+  
 }
 
 void loop() {
-  fadeToRandom();
+  fadeToRandom();  
 }
 
 void sequentialStars(){
@@ -72,6 +76,10 @@ void fadeToRandom(){
       }
 
     }
+    analogWrite(A2, starlight[0][0]+150);
+    analogWrite(A3, starlight[0][2]+150);
+    analogWrite(A5, starlight[1][0]+150);
+
     stars.show();
     delay(RATE);
   }
@@ -88,6 +96,9 @@ void fadeIn(){
     for(int star = 0; star < CONTROLLERS*3; star++){
       setStar(star, target[star]/numSteps*steps);
     }
+    analogWrite(A2, starlight[0][0]+100);
+    analogWrite(A3, starlight[0][2]+100);
+    analogWrite(A5, starlight[1][0]+100);
     stars.show();
     delay(RATE);
   }
@@ -105,6 +116,6 @@ void setStar(int num, int val) {
   int driver = getStarDriver(num); // 0-5 
   int index = getStarIndex(num); // 0-2
   starlight[driver][index] = val;
-  stars.setPixelColor(driver, starlight[driver][0], starlight[driver][1], starlight[driver][2]);
+  stars.setPixelColor(driver, 0, starlight[driver][1], 0);
 }
 
