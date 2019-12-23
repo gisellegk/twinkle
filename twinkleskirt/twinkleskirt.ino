@@ -4,9 +4,9 @@
 #endif
 
 #define PIN 8
-#define MAX 255
+#define MAX 100
 #define RATE 20
-#define CONTROLLERS 7
+#define CONTROLLERS 40
 
 Adafruit_NeoPixel stars = Adafruit_NeoPixel(CONTROLLERS, PIN, NEO_GRB + NEO_KHZ800);
 int starlight[CONTROLLERS][3];
@@ -23,8 +23,6 @@ void setup() {
   stars.begin();
   stars.show(); // Initialize all pixels to 'off'
   fadeIn();
-  
-  
 }
 
 void loop() {
@@ -90,9 +88,6 @@ void fadeIn(){
     for(int star = 0; star < CONTROLLERS*3; star++){
       setStar(star, target[star]/numSteps*steps);
     }
-    analogWrite(A2, starlight[0][0]+100);
-    analogWrite(A3, starlight[0][2]+100);
-    analogWrite(A5, starlight[1][0]+100);
     stars.show();
     delay(RATE);
   }
